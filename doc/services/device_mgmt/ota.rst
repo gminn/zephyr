@@ -22,6 +22,17 @@ upgraded using the :ref:`mcuboot` process.
 Examples of OTA
 ***************
 
+Eclipse hawkBit |trade|
+=======================
+
+`Eclipse hawkBit`_ |trade| is an update server framework that uses polling on a
+REST api to detect firmware updates. When a new update is detected, the binary
+is downloaded and installed. MCUboot can be used to verify the signature before
+upgrading the firmware.
+
+There is a :zephyr:code-sample:`hawkbit-api` sample included in the
+Zephyr :zephyr:code-sample-category:`mgmt` section.
+
 Golioth
 =======
 
@@ -36,26 +47,46 @@ upgrade occurs.
 2. The `Golioth OTA documentation`_ includes complete information about the
    versioning process
 
-Eclipse hawkBit |trade|
+Lightweight M2M (LWM2M)
 =======================
 
-`Eclipse hawkBit`_ |trade| is an update server framework that uses polling on a
-REST api to detect firmware updates. When a new update is detected, the binary
-is downloaded and installed. MCUboot can be used to verify the signature before
-upgrading the firmware.
+The :ref:`lwm2m_interface` protocol includes support for firmware update via
+:kconfig:option:`CONFIG_LWM2M_FIRMWARE_UPDATE_OBJ_SUPPORT`. Devices securely
+connect to an LwM2M server using DTLS. A :zephyr:code-sample:`lwm2m-client` sample is
+available but it does not demonstrate the firmware update feature.
 
-There is a :zephyr:code-sample:`hawkbit-api` sample included in the
-Zephyr :zephyr:code-sample-category:`mgmt` section.
+nRF Cloud powered by Memfault
+========
 
-UpdateHub
-=========
+`nRF Cloud powered by Memfault`_ is a IoT observability platform that includes OTA
+management. Devices check-in with nRF Cloud's service periodically for an OTA update,
+and when an update is available, download and install the binary. Zephyr projects that
+use MCUboot and have a direct internet connection can leverage the
+`Memfault Firmware SDK_`'s built-in OTA client to download a payload from nRF Cloud's
+OTA service, load it into the secondary partition, and then reboot into the new image.
 
-`UpdateHub`_ is a platform for remotely updating embedded devices. Updates can
-be manually triggered or monitored via polling. When a new update is detected,
-the binary is downloaded and installed. MCUboot can be used to verify the
-signature before upgrading the firmware.
+See :ref:`external_module_memfault_firmware_sdk` for integration details and examples.
 
-There is an :zephyr:code-sample:`updatehub-fota` sample included in the Zephyr
+mender-mcu
+==========
+
+`mender-mcu`_ enables robust firmware updates on resource-constrained devices by
+integrating with Zephyr. It implements an Update Module interface and provides
+a default Update Module that integrates with MCUboot to provide A/B updates.
+This allows microcontroller units (MCUs) to perform atomic, fail-safe OTA
+updates with automatic rollback on failure.
+
+See :ref:`external_module_mender_mcu` for integration details and examples.
+
+SMP Server
+==========
+
+A Simple Management Protocol (SMP) server can be used to update firmware via
+Bluetooth Low Energy (LE) or UDP. :ref:`mcu_mgr` is used to send a signed
+firmware binary to the remote device where it is verified by MCUboot before the
+upgrade occurs.
+
+There is an :zephyr:code-sample:`smp-svr` sample included in the Zephyr
 :zephyr:code-sample-category:`mgmt` section.
 
 SMP Server
@@ -69,29 +100,23 @@ upgrade occurs.
 There is an :zephyr:code-sample:`smp-svr` sample included in the Zephyr
 :zephyr:code-sample-category:`mgmt` section.
 
-Lightweight M2M (LWM2M)
-=======================
+UpdateHub
+=========
 
-The :ref:`lwm2m_interface` protocol includes support for firmware update via
-:kconfig:option:`CONFIG_LWM2M_FIRMWARE_UPDATE_OBJ_SUPPORT`. Devices securely
-connect to an LwM2M server using DTLS. A :zephyr:code-sample:`lwm2m-client` sample is
-available but it does not demonstrate the firmware update feature.
+`UpdateHub`_ is a platform for remotely updating embedded devices. Updates can
+be manually triggered or monitored via polling. When a new update is detected,
+the binary is downloaded and installed. MCUboot can be used to verify the
+signature before upgrading the firmware.
 
-mender-mcu
-==========
-
-`mender-mcu`_ enables robust firmware updates on resource-constrained devices by
-integrating with Zephyr. It implements an Update Module interface and provides
-a default Update Module that integrates with MCUboot to provide A/B updates.
-This allows microcontroller units (MCUs) to perform atomic, fail-safe OTA
-updates with automatic rollback on failure.
-
-See :ref:`external_module_mender_mcu` for integration details and examples.
+There is an :zephyr:code-sample:`updatehub-fota` sample included in the Zephyr
+:zephyr:code-sample-category:`mgmt` section.
 
 .. _MCUboot bootloader: https://mcuboot.com/
+.. _Eclipse hawkBit: https://www.eclipse.org/hawkbit/
 .. _Golioth: https://golioth.io/
 .. _Golioth Firmware SDK repository: https://github.com/golioth/golioth-firmware-sdk/tree/main/examples/zephyr/fw_update
 .. _Golioth OTA documentation: https://docs.golioth.io/device-management/ota
-.. _Eclipse hawkBit: https://www.eclipse.org/hawkbit/
-.. _UpdateHub: https://updatehub.io/
+.. _nRF Cloud powered by Memfault: https://nrfcloud.com/#/
+.. _Memfault Firmware SDK: https://github.com/memfault/memfault-firmware-sdk
 .. _mender-mcu: https://github.com/mendersoftware/mender-mcu
+.. _UpdateHub: https://updatehub.io/
